@@ -41,82 +41,70 @@ class ConfigFileParameters():
     webDirPath = attr.ib(validator=instance_of(str), default='./HGCALTPG_Validation/GIFS')
 
     def installWorkingRefDir(self):
-        command = 'export SCRAM_ARCH=' + self.scramArch + ';' + \
-        'echo $SCRAM_ARCH'  + ';' + \
-        'scramv1 p -n ' + self.workingRefDir + ' CMSSW ' + self.releaseRefName + ';' + \
-        'cd ' + self.workingRefDir + '/src;' + \
-        'echo $PWD; ' + \
-        'eval `scramv1 runtime -sh`;' + \
-        'git cms-merge-topic ' + self.remoteRef + ':' + self.remoteRefBranchName + ';' + \
-        'git checkout -b ' + self.localRefBranchName + ' ' + self.remoteRef + '/' + self.remoteRefBranchName + ';'
+        command = 'export SCRAM_ARCH=' + self.scramArch + ';'
+        command += 'echo $SCRAM_ARCH'  + ';' 
+        command += 'scramv1 p -n ' + self.workingRefDir + ' CMSSW ' + self.releaseRefName + ';' 
+        command += 'cd ' + self.workingRefDir + '/src;' 
+        command += 'echo $PWD; '
+        command += 'eval `scramv1 runtime -sh`;'
+        command += 'git cms-merge-topic ' + self.remoteRef + ':' + self.remoteRefBranchName + ';'
+        command += 'git checkout -b ' + self.localRefBranchName + ' ' + self.remoteRef + '/' + self.remoteRefBranchName + ';'
         return command
     
     def installWorkingTestDir(self):
-        command = 'export SCRAM_ARCH=' + self.scramArch + ';' + \
-        'echo $SCRAM_ARCH'  + ';' + \
-        'scramv1 p -n ' + self.workingTestDir + ' CMSSW ' + self.releaseTestName + ';' + \
-        'cd ' + self.workingTestDir + '/src;' + \
-        'echo $PWD; ' + \
-        'eval `scramv1 runtime -sh`;' + \
-        'git cms-merge-topic ' + self.remoteTest + ':' + self.remoteTestBranchName + ';' + \
-        'git checkout -b ' + self.localTestBranchName + ' ' + self.remoteTest + '/' + self.remoteTestBranchName + ';'
+        command = 'export SCRAM_ARCH=' + self.scramArch + ';'
+        command += 'echo $SCRAM_ARCH'  + ';'
+        command += 'scramv1 p -n ' + self.workingTestDir + ' CMSSW ' + self.releaseTestName + ';'
+        command += 'cd ' + self.workingTestDir + '/src;'
+        command += 'echo $PWD; '
+        command += 'eval `scramv1 runtime -sh`;'
+        command += 'git cms-merge-topic ' + self.remoteTest + ':' + self.remoteTestBranchName + ';'
+        command += 'git checkout -b ' + self.localTestBranchName + ' ' + self.remoteTest + '/' + self.remoteTestBranchName + ';'
         return command
 
     def runCompileRefStep(self):
-        command = 'export SCRAM_ARCH=' + self.scramArch + ';' + \
-        'cd ' + self.workingRefDir + '/src; eval `scramv1 runtime -sh`;' + \
-        'scram b -j4; ' + 'echo === End of compilation ===;' + 'echo $PWD;'
+        command = 'export SCRAM_ARCH=' + self.scramArch + ';'
+        command += 'cd ' + self.workingRefDir + '/src; eval `scramv1 runtime -sh`;'
+        command += 'scram b -j4; ' + 'echo === End of compilation ===;' + 'echo $PWD;'
         return command
 
     def runCompileTestStep(self):
-        command = 'export SCRAM_ARCH=' + self.scramArch + ';' + \
-        'cd ' + self.workingTestDir + '/src; eval `scramv1 runtime -sh`;' + \
-        'scram b -j4; ' + 'echo === End of compilation ===;' + 'echo $PWD;'
+        command = 'export SCRAM_ARCH=' + self.scramArch + ';'
+        command += 'cd ' + self.workingTestDir + '/src; eval `scramv1 runtime -sh`;'
+        command += 'scram b -j4; ' + 'echo === End of compilation ===;' + 'echo $PWD;'
         return command
 
     def runSimulationRefStep(self):
+        command =  'export SCRAM_ARCH=' + self.scramArch + ';'
+        command += 'cd ' + self.workingRefDir + '/src; eval `scramv1 runtime -sh`;'
+        command += 'cmsDriver.py hgcal_tpg_validation -n ' + str(self.numberOfEvents) + ' --mc  --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW --conditions ' + self.conditions + ' '
+        command += '--beamspot ' + self.beamspot + ' ' + '--step ' + self.step + ' '
+        command += '--geometry ' + self.geometryRef +  ' ' + '--era ' + self.eraRefName + ' ' 
         if self.procModifiers !='':
-           command =  'export SCRAM_ARCH=' + self.scramArch + ';' + \
-           'cd ' + self.workingRefDir + '/src; eval `scramv1 runtime -sh`;' + \
-           'cmsDriver.py hgcal_tpg_validation -n ' + str(self.numberOfEvents) + ' --mc  --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW --conditions ' + self.conditions + ' ' + \
-           '--beamspot ' + self.beamspot + ' ' + '--step ' + self.step + ' ' + \
-           '--geometry ' + self.geometryRef +  ' ' + '--era ' + self.eraRefName + ' ' + '--procModifiers ' + self.procModifiers + ' ' + \
-           '--inputCommands "keep *",' + self.dropedBranches + ' ' + \
-           '--filein ' + self.inputRefFileName + ' ' + \
-           '--no_output ' + '--customise=' + self.customiseRefFile + ' ' + \
-           '--customise_commands "process.MessageLogger.destinations = cms.untracked.vstring(\'out_ref\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"' + ';'
-        else:
-           command =  'export SCRAM_ARCH=' + self.scramArch + ';' + \
-           'cd ' + self.workingRefDir + '/src; eval `scramv1 runtime -sh`;' + \
-           'cmsDriver.py hgcal_tpg_validation -n ' + str(self.numberOfEvents) + ' --mc  --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW --conditions ' + self.conditions + ' ' + \
-           '--beamspot ' + self.beamspot + ' ' + '--step ' + self.step + ' ' + \
-           '--geometry ' + self.geometryRef +  ' ' + '--era ' + self.eraRefName + ' ' + \
-           '--inputCommands "keep *",' + self.dropedBranches + ' ' + \
-           '--filein ' + self.inputRefFileName + ' ' + \
-           '--no_output ' + '--customise=' + self.customiseRefFile + ' ' + \
-           '--customise_commands "process.MessageLogger.destinations = cms.untracked.vstring(\'out_ref\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"' + ';'
+           command += '--procModifiers ' + self.procModifiers + ' '
+        command += '--inputCommands "keep *",' + self.dropedBranches + ' '
+        command += '--filein ' + self.inputRefFileName + ' '
+        command += '--no_output ' + '--customise=' + self.customiseRefFile + ' '
+        customize_commands = 'process.MessageLogger.destinations = cms.untracked.vstring(\'out_ref\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)'
+        if 'L1THGCalUtilities/hgcalTriggerValidation_cff' in self.step:
+            customize_commands += '; process.TFileService = cms.Service(\'TFileService\',fileName = cms.string(\'ntuple.root\'))'
+        command += '--customise_commands "'+ customize_commands +'"' + ';'
         return command
    
 
     def runSimulationTestStep(self):
-        if self.procModifiers !='':      
-           command =  'export SCRAM_ARCH=' + self.scramArch + ';' + \
-           'cd ' + self.workingTestDir + '/src; eval `scramv1 runtime -sh`;' + \
-           'cmsDriver.py hgcal_tpg_validation -n ' + str(self.numberOfEvents) + ' --mc  --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW --conditions ' + self.conditions + ' ' + \
-           '--beamspot ' + self.beamspot + ' ' + '--step ' + self.step + ' ' + \
-           '--geometry ' + self.geometryTest +  ' ' + '--era ' + self.eraTestName + ' ' + '--procModifiers ' + self.procModifiers + ' ' + \
-           '--inputCommands "keep *",' + self.dropedBranches + ' ' + \
-           '--filein ' + self.inputTestFileName + ' ' + \
-           '--no_output ' + '--customise=' + self.customiseTestFile + ' ' + \
-           '--customise_commands "process.MessageLogger.destinations = cms.untracked.vstring(\'out_test\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"' + ';'
-        else:
-           command =  'export SCRAM_ARCH=' + self.scramArch + ';' + \
-           'cd ' + self.workingTestDir + '/src; eval `scramv1 runtime -sh`;' + \
-           'cmsDriver.py hgcal_tpg_validation -n ' + str(self.numberOfEvents) + ' --mc  --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW --conditions ' + self.conditions + ' ' + \
-           '--beamspot ' + self.beamspot + ' ' + '--step ' + self.step + ' ' + \
-           '--geometry ' + self.geometryTest +  ' ' + '--era ' + self.eraTestName + ' ' + \
-           '--inputCommands "keep *",' + self.dropedBranches + ' ' + \
-           '--filein ' + self.inputTestFileName + ' ' + \
-           '--no_output ' + '--customise=' + self.customiseTestFile + ' ' + \
-           '--customise_commands "process.MessageLogger.destinations = cms.untracked.vstring(\'out_test\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)"' + ';'
+        command =  'export SCRAM_ARCH=' + self.scramArch + ';'
+        command += 'cd ' + self.workingTestDir + '/src; eval `scramv1 runtime -sh`;'
+        command += 'cmsDriver.py hgcal_tpg_validation -n ' + str(self.numberOfEvents) + ' --mc  --eventcontent FEVTDEBUG --datatier GEN-SIM-DIGI-RAW --conditions ' + self.conditions + ' '
+        command += '--beamspot ' + self.beamspot + ' ' + '--step ' + self.step + ' '
+        command += '--geometry ' + self.geometryTest +  ' ' + '--era ' + self.eraTestName + ' ' 
+        if self.procModifiers !='':
+           command += '--procModifiers ' + self.procModifiers + ' '
+        command += '--inputCommands "keep *",' + self.dropedBranches + ' '
+        command += '--filein ' + self.inputTestFileName + ' '
+        command += '--no_output ' + '--customise=' + self.customiseTestFile + ' '
+        customize_commands = 'process.MessageLogger.destinations = cms.untracked.vstring(\'out_test\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)'
+        if 'L1THGCalUtilities/hgcalTriggerValidation_cff' in self.step:
+            customize_commands += '; process.TFileService = cms.Service(\'TFileService\',fileName = cms.string(\'ntuple.root\'))'
+        command += '--customise_commands "'+ customize_commands +'"' + ';'
         return command

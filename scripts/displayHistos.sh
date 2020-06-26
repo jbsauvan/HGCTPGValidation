@@ -38,6 +38,11 @@ python -V
 echo 'The ROOT version is '
 root-config --version
 
+# Create histograms if ntuples have been produced
+if [[ -f "$1/ntuple.root" ]] && [[ -f "$2/ntuple.root" ]]; then
+    echo 'Producing histograms from ntuples'
+    python ../HGCTPGValidation/hgctpgvalidation/histosFromNtuple.py --reffile ntuple.root --testfile ntuple.root --refdir $1 --testdir $2
+fi
 # Extract Time information for all modules
 find . -name "out_ref.log" | xargs grep "TimeModule>" > TimingInfo_ref.txt
 find . -name "out_test.log" | xargs grep "TimeModule>" > TimingInfo_test.txt

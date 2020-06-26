@@ -12,17 +12,6 @@ tc_y
 tc_z
 tc_layer
 
-Histogram cl related
-
-cl_n
-cl_mipPt
-cl_pt 
-cl_energy 
-cl_eta
-cl_phi
-cl_layer
-cl_cells_n
-
 Histogram multicl related
 
 cl3d_n
