@@ -26,10 +26,12 @@ then
 else [ $simu_env -eq 3 ]
     # Config at LLR in sl7, switch to python2
     echo 'Config at LLR in sl7, switch to python2'
+    source /usr/share/Modules/init/bash
     module use /opt/exp_soft/vo.llr.in2p3.fr/modulefiles_el7/
     module purge
-    module load python/2.7.9
-    source /opt/exp_soft/llr/root/v6.06.00-el6-gcc48/etc/init.sh
+    # module load python/2.7.9
+    # source /opt/exp_soft/llr/root/v6.06.00-el6-gcc48/etc/init.sh
+    source /opt/exp_soft/llr/root/v6.12.06-el7-gcc49/etc/init.sh
     echo 'Installed sl7 environment at LLR'
 fi
 

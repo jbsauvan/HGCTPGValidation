@@ -6,10 +6,10 @@ from ROOT import gROOT, gBenchmark, gRandom, gSystem, gDirectory, Double
 
 
 histograms = [
-  TH1F("tc_n", "trigger cell number; number", 400, 0, 400),
-  TH1F("tc_mipPt", "trigger cell mipPt; mipPt", 400, 0, 400),
-  TH1F("tc_pt", "trigger cell pt; pt [GeV]", 15, 0, 15),
-  TH1F("tc_energy", "trigger cell energy; energy [GeV]", 70, 0, 70),
+  TH1F("tc_n", "trigger cell number; number", 500, 10000, 25000),
+  TH1F("tc_mipPt", "trigger cell mipPt; mipPt", 500, 0, 100),
+  TH1F("tc_pt", "trigger cell pt; pt [GeV]", 500, 0, 5),
+  TH1F("tc_energy", "trigger cell energy; energy [GeV]", 500, 0, 100),
   TH1F("tc_eta", "trigger cell eta; eta", 60, -3.14, 3.14),
   TH1F("tc_phi", "trigger cell phi; phi", 60, -3.14, 3.14),
   TH1F("tc_x", "trigger cell x; x [cm]", 500, -250, 250),

@@ -85,7 +85,7 @@ class ConfigFileParameters():
         command += '--inputCommands "keep *",' + self.dropedBranches + ' '
         command += '--filein ' + self.inputRefFileName + ' '
         command += '--no_output ' + '--customise=' + self.customiseRefFile + ' '
-        customize_commands = 'process.MessageLogger.destinations = cms.untracked.vstring(\'out_ref\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)'
+        customize_commands = 'process.MessageLogger.files.out_ref = dict(); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)'
         if 'L1THGCalUtilities/hgcalTriggerValidation_cff' in self.step:
             customize_commands += '; process.TFileService = cms.Service(\'TFileService\',fileName = cms.string(\'ntuple.root\'))'
         command += '--customise_commands "'+ customize_commands +'"' + ';'
@@ -103,7 +103,7 @@ class ConfigFileParameters():
         command += '--inputCommands "keep *",' + self.dropedBranches + ' '
         command += '--filein ' + self.inputTestFileName + ' '
         command += '--no_output ' + '--customise=' + self.customiseTestFile + ' '
-        customize_commands = 'process.MessageLogger.destinations = cms.untracked.vstring(\'out_test\',\'cout\'); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)'
+        customize_commands = 'process.MessageLogger.files.out_test = dict(); process.Timing = cms.Service(\'Timing\', summaryOnly = cms.untracked.bool(False), useJobReport = cms.untracked.bool(True)); process.SimpleMemoryCheck = cms.Service(\'SimpleMemoryCheck\', ignoreTotal = cms.untracked.int32(1)); process.schedule = cms.Schedule(process.user_step)'
         if 'L1THGCalUtilities/hgcalTriggerValidation_cff' in self.step:
             customize_commands += '; process.TFileService = cms.Service(\'TFileService\',fileName = cms.string(\'ntuple.root\'))'
         command += '--customise_commands "'+ customize_commands +'"' + ';'

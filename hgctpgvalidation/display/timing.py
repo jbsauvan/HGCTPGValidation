@@ -24,12 +24,12 @@ def readFileStatement(namefile, dirname):
     topDir = gDirectory
     topDir.cd("DQMData/Run 1/HGCALTPG/Run summary")
     
-    h_VFE = TH1F( 'h_VFE', 'HGCalVFEProducer: Time/event distribution', 1000, 0, 1.5 )
-    h_Conc = TH1F( 'h_Conc', 'HGCalConcentratorProducer: Time/event distribution', 1000, 0, 0.5 )
-    h_BackendL1 = TH1F( 'h_BackendL1', 'HGCalBackendLayer1Producer: Time/event distribution', 1000, 0, 1.5 )
-    h_BackendL2 = TH1F( 'h_BackendL2', 'HGCalBackendLayer2Producer: Time/event distribution', 1000, 0, 0.5 )
-    h_TowerMap = TH1F( 'h_TowerMap', 'HGCalTowerMapProducer: Time/event distribution', 1000, 0, 0.5 )
-    h_Tower = TH1F( 'h_Tower', 'HGCalTowerProducer: Time/event distribution', 1000, 0, 0.5 )
+    h_VFE = TH1F( 'h_VFE', 'HGCalVFEProducer: Time/event distribution', 100, 0, 1.5 )
+    h_Conc = TH1F( 'h_Conc', 'HGCalConcentratorProducer: Time/event distribution', 100, 0, 2.5 )
+    h_BackendL1 = TH1F( 'h_BackendL1', 'HGCalBackendLayer1Producer: Time/event distribution', 100, 0, 1.5 )
+    h_BackendL2 = TH1F( 'h_BackendL2', 'HGCalBackendLayer2Producer: Time/event distribution', 100, 0, 1.5 )
+    h_TowerMap = TH1F( 'h_TowerMap', 'HGCalTowerMapProducer: Time/event distribution', 100, 0, 0.5 )
+    h_Tower = TH1F( 'h_Tower', 'HGCalTowerProducer: Time/event distribution', 100, 0, 0.5 )
     # list of histograms
     listHistos = [h_VFE, h_Conc, h_BackendL1, h_BackendL2, h_TowerMap, h_Tower]
 
@@ -47,14 +47,15 @@ def readFileStatement(namefile, dirname):
             for i in range(len(listProducers)):
                 if words[4]==listProducers[i]:
                     listHistos[i].Fill(float(words[5]))
-                    # Set new histo range, -10% bellow the first non zero bin, and + 10% above the last non zero bin
-                    if (listHistos[i].FindFirstBinAbove() <> listHistos[i].FindLastBinAbove()):
-                        add = int(listHistos[i].FindLastBinAbove()*0.10)
-                        if (add == 0):
-                            add = 5
-                        listHistos[i].GetXaxis().SetRange(listHistos[i].FindFirstBinAbove() - add, listHistos[i].FindLastBinAbove() + add)
-                    elif (listHistos[i].FindLastBinAbove() == 1):
-                        listHistos[i].GetXaxis().SetRange(listHistos[i].FindFirstBinAbove(), listHistos[i].FindLastBinAbove() + 10)
+    # Set new histo range, -10% bellow the first non zero bin, and + 10% above the last non zero bin
+    for i in range(len(listProducers)):
+        if (listHistos[i].FindFirstBinAbove() <> listHistos[i].FindLastBinAbove()):
+            add = int(listHistos[i].FindLastBinAbove()*0.10)
+            if (add == 0):
+                add = 5
+            listHistos[i].GetXaxis().SetRange(listHistos[i].FindFirstBinAbove() - add, listHistos[i].FindLastBinAbove() + add)
+        elif (listHistos[i].FindLastBinAbove() == 1):
+            listHistos[i].GetXaxis().SetRange(listHistos[i].FindFirstBinAbove(), listHistos[i].FindLastBinAbove() + 10)
     hFile.Write()
     f.close()
 

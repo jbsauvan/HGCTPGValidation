@@ -350,18 +350,18 @@ def createWebPageLite(input_rel_file, input_ref_file, path_1, path_2, cnv, webdi
                 gif_name_index = histo_name + ".gif"
                 createPicture2(histo_1, histo_2, "1", "1", gif_name, cnv, "lin")
                 # Make histo in log
-                #if (histo_1.GetMaximum() > 0 and histo_1.GetMinimum() >= 0):
-                #    gif_name_log = webdir + '/' + histo_name + "_log.gif"
-                #    gif_name_log_index = histo_name + "_log.gif"
-                #    createPicture2(histo_1, histo_2, "1", "1", gif_name_log, cnv, "log")
+                if (histo_1.GetMaximum() > 0 and histo_1.GetMinimum() >= 0):
+                  gif_name_log = webdir + '/' + histo_name + "_log.gif"
+                  gif_name_log_index = histo_name + "_log.gif"
+                  createPicture2(histo_1, histo_2, "1", "1", gif_name_log, cnv, "log")
 
                 wp.write( "\n<td><a href=\"#TOP\"><img width=\"18\" height=\"18\" border=\"0\" align=\"middle\" src=" + image_up + " alt=\"Top\"/></a></td>\n" )
                 wp.write( "<td>" )
                 wp.write( "<a id=\"" + short_histo_name + "\" name=\"" + short_histo_name + "\"></a>" )
                 wp.write( "<a href=\"" + gif_name_index + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name_index + "\"></a>" )
                 # For histo in log
-                #if (histo_1.GetMaximum() > 0 and histo_1.GetMinimum() >= 0):
-                #    wp.write( "</td><td><a href=\"" + gif_name_log_index + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name_log_index + "\"></a>" )
+                if (histo_1.GetMaximum() > 0 and histo_1.GetMinimum() >= 0):
+                  wp.write( "</td><td><a href=\"" + gif_name_log_index + "\"><img border=\"0\" class=\"image\" width=\"440\" src=\"" + gif_name_log_index + "\"></a>" )
                 wp.write( "</td></tr><tr valign=\"top\">" )
     
     wp.write( "<h2>" + "Memory Report" + "</h2>\n" )
