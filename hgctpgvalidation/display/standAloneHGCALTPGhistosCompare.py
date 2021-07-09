@@ -32,6 +32,7 @@ def main(refdir, testdir, webdir):
     
     # Files names
     filename = "/DQM_V0001_R000000001__validation__HGCAL__TPG.root"
+    #  filename = "/DQM_V0001_new_R000000001.root"
     input_rel_file = refdir + filename
     input_ref_file = testdir + filename
     path_1 = 'DQMData/Run 1/HGCALTPG/Run summary'
